@@ -1,0 +1,17 @@
+{
+    "name": "seb/slim3",
+    "authors": [
+        {
+            "name": "nwcra791",
+            "email": "labego_s@etna-alternance.net"
+        }
+		],
+		"autoload": {
+			"psr-4": {
+				"App\\": "app/"
+			}
+		},
+    "require": {
+        "slim/slim": "^3.10"
+    }
+}
