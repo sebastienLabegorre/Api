@@ -36,5 +36,18 @@ class HomepageTest extends BaseTestCase
 
         $this->assertEquals(405, $response->getStatusCode());
         $this->assertContains('Method not allowed', (string)$response->getBody());
-    }
+		}
+
+		public function getAllRecipes() {
+			$response = $this->runApp('GET', '/api/recipes.json');
+
+			$query = "SELECT * FROM `recipes__recipe`";
+			$data = $this->container->db->query($query);
+			//var_dump($data);
+			$json_data = json_encode($data);
+
+			$this->assertEquals(200, $response->getStatusCode());
+			$res->write($json_data);
+			$this->assertContains('Hello name!', (string)$response->getBody());
+		}
 }
