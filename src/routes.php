@@ -38,6 +38,7 @@ $app->get('/api/recipes/[{arg1}]', function (Request $request, Response $respons
 			$query = "SELECT id, name, slug, step FROM `recipes__recipe` WHERE slug = '".$recherche."'";
 			$data = mysqli_query($this->mysqli, $query);
 			$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
+			$data = $data[0];
 			$responseArray = array(
 				'code' => 200,
 				'message' => 'OK',
