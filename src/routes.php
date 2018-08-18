@@ -41,3 +41,27 @@ $app->get('/[{name}]', function (Request $request, Response $response, array $ar
 
 	return $this->renderer->render($response, 'index.phtml', $args);
 });
+
+$app->get('/api/[{name}]', function (Request $request, Response $response, array $args) {
+	$this->logger->info("Slim-Skeleton '/' route");
+	$responseArray = array(
+		'code' => '404',
+		'message' => 'Not Found',
+		'datas' => array(),
+	);
+	$json_data = json_encode($responseArray);
+	$response->getBody()->write($json_data);
+	return $this->renderer->render($response, 'index.phtml', $args);
+});
+
+$app->get('/[{arg1}]/[{arg2}]', function (Request $request, Response $response, array $args) {
+	$this->logger->info("Slim-Skeleton '/' route");
+	$responseArray = array(
+		'code' => '404',
+		'message' => 'Not Found',
+		'datas' => array(),
+	);
+	$json_data = json_encode($responseArray);
+	$response->getBody()->write($json_data);
+	return $this->renderer->render($response, 'index.phtml', $args);
+});
