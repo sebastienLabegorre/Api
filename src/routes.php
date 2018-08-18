@@ -26,7 +26,7 @@ $app->get('/api/recipes', function (Request $request, Response $response, array 
 	return $this->renderer->render($response, 'index.phtml', $args);
 });
 
-$app->get('/api/recipes/:arg1/steps.json', function (Request $request, Response $response, $arg1) {
+$app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response $response, $arg1) {
 	$this->logger->info("Slim-Skeleton '/' route");
 
 	$query = "SELECT slug FROM `recipes__recipe`";
