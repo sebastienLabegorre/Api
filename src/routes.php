@@ -56,7 +56,7 @@ $app->get('/api/recipes/:arg1/steps.json', function (Request $request, Response 
 	$json_data = json_encode($responseArray);
 	$response = $response->withStatus(404, 'Not Found');
 	$response->getBody()->write($json_data);
-	return $this->renderer->render($response, 'index.phtml', $args);
+	return $this->renderer->render($response, 'index.phtml', array());
 });
 
 $app->get('/api/recipes/[{arg1}]', function (Request $request, Response $response, array $args) {
