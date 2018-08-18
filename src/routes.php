@@ -6,7 +6,7 @@ use Slim\Http\Response;
 // Routes
 
 
-$app->get('/recipes', function (Request $request, Response $response, array $args) {
+$app->get('/api/recipes', function (Request $request, Response $response, array $args) {
 	// Sample log message
 	$this->logger->info("Slim-Skeleton '/' route");
 
