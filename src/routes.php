@@ -30,30 +30,30 @@ $app->get('/api/recipes/[{arg1}]', function (Request $request, Response $respons
 	$this->logger->info("Slim-Skeleton '/' route");
 
 	$recherche = str_replace('.json', '',$args[arg1]);
-
-	$query = "SELECT * FROM `recipes__recipe` WHERE slug = '".$recherche."'";
-
-	$data = mysqli_query($this->mysqli, $query);
-	var_dump($data);
-	exit;
-	$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
-	if($data == array()){
-		$responseArray = array(
-			'code' => 404,
-			'message' => 'Not Found',
-		);
-		$json_data = json_encode($responseArray);
-		$response->getBody()->write($json_data);
-		return $this->renderer->render($response, 'index.phtml', $args);
+	$query = "SELECT slug FROM `recipes__recipe`";
+	$slugs = mysqli_query($this->mysqli, $query);
+	$slugs = mysqli_fetch_all($data, MYSQLI_ASSOC);
+	var_dump($slugs);
+	foreach ($slugs as $key => $value) {
+		if ($value == $recherche) {
+			$query = "SELECT * FROM `recipes__recipe` WHERE slug = '".$recherche."'";
+			$data = mysqli_query($this->mysqli, $query);
+			$responseArray = array(
+				'code' => 200,
+				'message' => 'OK',
+				'datas' => $data,
+			);
+			$json_data = json_encode($responseArray);
+			$response->getBody()->write($json_data);
+			return $this->renderer->render($response, 'index.phtml', $args);
+		}
 	}
 	$responseArray = array(
-		'code' => 200,
-		'message' => 'OK',
-		'datas' => $data,
+		'code' => 404,
+		'message' => 'Not Found',
 	);
 	$json_data = json_encode($responseArray);
 	$response->getBody()->write($json_data);
-
 	return $this->renderer->render($response, 'index.phtml', $args);
 });
 
