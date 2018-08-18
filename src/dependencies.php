@@ -20,7 +20,7 @@ $container['logger'] = function ($c) {
 
 $container['mysqli'] = function() {
 
-		$mysqli = new mysqli("localhost","root","","etna-rest");
+		$mysqli = new mysqli("localhost","root","toor","etnarest");
 		if (mysqli_connect_errno()) {
 			echo "Failed to connect to MySQL: " . mysqli_connect_error();
 		}
