@@ -35,14 +35,23 @@ $app->get('/api/recipes/[{arg1}]', function (Request $request, Response $respons
 	$slugs = mysqli_fetch_all($slugs, MYSQLI_ASSOC);
 	foreach ($slugs as $key => $value) {
 		if ($value["slug"] == $recherche) {
-			$query = "SELECT id, name, slug, step FROM `recipes__recipe` WHERE slug = '".$recherche."'";
+			$query = "SELECT * FROM `recipes__recipe` WHERE slug = '".$recherche."'";
 			$data = mysqli_query($this->mysqli, $query);
 			$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
 			$data = $data[0];
+			$query = "SELECT username, last_login, id FROM `users__user` WHERE id = ".$data["user_id"];
+			$user = mysqli_query($this->mysqli, $query);
+			$user = mysqli_fetch_all($user, MYSQLI_ASSOC);
+			$user = $user[0];
 			$responseArray = array(
 				'code' => 200,
 				'message' => 'OK',
-				'datas' => $data,
+				'datas' => array(
+					'id' => $data['id'],
+					'name' => $data['name'],
+					'user' => $user,
+					'slug' => $data['slug'],
+				),
 			);
 			$json_data = json_encode($responseArray);
 			$response->getBody()->write($json_data);
@@ -63,7 +72,7 @@ $app->get('/api/recipes.json', function (Request $request, Response $response, a
 	// Sample log message
 	$this->logger->info("Slim-Skeleton '/' route");
 
-	$query = "SELECT id, user_id, name, slug FROM `recipes__recipe`";
+	$query = "SELECT id, name, slug FROM `recipes__recipe`";
 
 	$data = mysqli_query($this->mysqli, $query);
 	$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
