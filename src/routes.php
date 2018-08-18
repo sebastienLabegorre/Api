@@ -26,10 +26,12 @@ $app->get('/api/recipes', function (Request $request, Response $response, array 
 	return $this->renderer->render($response, 'index.phtml', $args);
 });
 
-$app->get('/api/recipes/[{arg1}].json', function (Request $request, Response $response, array $args) {
+$app->get('/api/recipes/[{arg1}]', function (Request $request, Response $response, array $args) {
 	$this->logger->info("Slim-Skeleton '/' route");
 
-	$query = "SELECT * FROM `recipes__recipe` WHERE slug = '".$args[arg1]."'";
+	$recherche = str_replace('.json', '',$args[arg1]);
+
+	$query = "SELECT * FROM `recipes__recipe` WHERE slug = '".$recherche."'";
 
 	$data = mysqli_query($this->mysqli, $query);
 	$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
