@@ -34,9 +34,18 @@ $app->get('/api/recipes/[{arg1}]', function (Request $request, Response $respons
 	$query = "SELECT * FROM `recipes__recipe` WHERE slug = '".$recherche."'";
 
 	$data = mysqli_query($this->mysqli, $query);
-	$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
 	var_dump($data);
 	exit;
+	$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
+	if($data == array()){
+		$responseArray = array(
+			'code' => 404,
+			'message' => 'Not Found',
+		);
+		$json_data = json_encode($responseArray);
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
 	$responseArray = array(
 		'code' => 200,
 		'message' => 'OK',
