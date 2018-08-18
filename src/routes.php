@@ -35,7 +35,7 @@ $app->get('/api/recipes/[{arg1}]', function (Request $request, Response $respons
 	$slugs = mysqli_fetch_all($slugs, MYSQLI_ASSOC);
 	var_dump($slugs);
 	foreach ($slugs as $key => $value) {
-		if ($value == $recherche) {
+		if ($value["slug"] == $recherche) {
 			$query = "SELECT * FROM `recipes__recipe` WHERE slug = '".$recherche."'";
 			$data = mysqli_query($this->mysqli, $query);
 			$responseArray = array(
