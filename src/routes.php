@@ -32,7 +32,7 @@ $app->get('/api/recipes/[{arg1}]', function (Request $request, Response $respons
 	$recherche = str_replace('.json', '',$args[arg1]);
 	$query = "SELECT slug FROM `recipes__recipe`";
 	$slugs = mysqli_query($this->mysqli, $query);
-	$slugs = mysqli_fetch_all($data, MYSQLI_ASSOC);
+	$slugs = mysqli_fetch_all($slugs, MYSQLI_ASSOC);
 	var_dump($slugs);
 	foreach ($slugs as $key => $value) {
 		if ($value == $recherche) {
