@@ -26,8 +26,6 @@ $app->get('/api/recipes', function (Request $request, Response $response, array 
 	return $this->renderer->render($response, 'index.phtml', $args);
 });
 
-curl -X "GET" /api/recipes/:american-fries/steps.json
-
 $app->get('/api/recipes/:arg1/steps.json', function (Request $request, Response $response, $arg1) {
 	$this->logger->info("Slim-Skeleton '/' route");
 
