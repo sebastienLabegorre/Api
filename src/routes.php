@@ -35,6 +35,8 @@ $app->get('/api/recipes/[{arg1}]', function (Request $request, Response $respons
 
 	$data = mysqli_query($this->mysqli, $query);
 	$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
+	var_dump($data);
+	exit;
 	$responseArray = array(
 		'code' => 200,
 		'message' => 'OK',
