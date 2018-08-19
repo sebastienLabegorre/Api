@@ -44,9 +44,8 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 	if(isset($_POST['step']) && isset($_POST['name']) ){
 		if(isset($_POST['slug'])) {
 			$query = "SELECT id FROM `recipes__recipe` WHERE `slug` = '".$_POST['slug']."'";
-			$slug = mysqli_query($this->mysqli, $query_pass);
+			$slug = mysqli_query($this->mysqli, $query);
 			$slug = mysqli_fetch_all($slug, MYSQLI_ASSOC);
-			var_dump($slug);
 			if($slug[0] != array()){
 				$responseArray = array(
 					'code' => 400,
