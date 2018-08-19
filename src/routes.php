@@ -42,8 +42,6 @@ $app->get('/api/delete/[{arg1}]', function (Request $request, Response $response
 
 $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	$headerValueArray = $request->getHeader('authorization');
-	var_dump($headerValueArray);
-	var_dump($request->getHeader());
 	if (isset($headerValueArray[0])) {
 		$password = $headerValueArray[0];
 	} else {
@@ -60,10 +58,22 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	$query = "SELECT id, password FROM `users__user`";
 	$allpas = mysqli_query($this->mysqli, $query);
 	$allpas = mysqli_fetch_all($allpas, MYSQLI_ASSOC);
-
-	var_dump($password);
-	var_dump($allpas);
-	exit;
+	$id_user_pass = '';
+	foreach ($allpas as $key => $objPass) {
+		if($objPass["password"] == $password){
+			$id_user_pass = $objPass["id"];
+		}
+	}
+	if($id_user_pass == ''){
+		$responseArray = array(
+			'code' => 401,
+			'message' => 'Unauthorized',
+		);
+		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(401, 'Unauthorized');
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
 
 	$arg1 = $args['arg1'];
 	$arg1 = str_replace('.json', '', $arg1);
@@ -71,6 +81,8 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	$data = mysqli_query($this->mysqli, $query);
 	$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
 	$data = $data[0];
+	var_dump($data);
+	exit;
 	$id = $data["id"];
 	$user_id = $data ["user_id"];
 	$name = $data["name"];
