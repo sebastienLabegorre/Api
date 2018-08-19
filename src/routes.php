@@ -135,11 +135,12 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 		}
 	} else {
 		$responseArray = array(
-			'code' => 403,
-			'message' => 'Forbidden',
+			'code' => 400,
+			'message' => 'Bad Request',
+			'datas' => array(),
 		);
 		$json_data = json_encode($responseArray);
-		$response = $response->withStatus(403, 'Forbidden');
+		$response = $response->withStatus(400, 'Bad Request');
 		$response->getBody()->write($json_data);
 		return $this->renderer->render($response, 'index.phtml', $args);
 	}
