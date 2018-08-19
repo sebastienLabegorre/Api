@@ -194,6 +194,7 @@ $app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response
 				'message' => 'OK',
 				'datas' => $data,
 			);
+			var_dump($responseArray);
 			$json_data = json_encode($responseArray);
 			$response->getBody()->write($json_data);
 			return $this->renderer->render($response, 'index.phtml', array());
