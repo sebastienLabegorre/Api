@@ -184,14 +184,11 @@ $app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response
 			$query = "SELECT step FROM `recipes__recipe` where slug = '".$arg1."'";
 			$data = mysqli_query($this->mysqli, $query);
 			$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
-			var_dump($data);
 			$data = str_replace('"', '', $data[0]["step"]);
-			var_dump($data);
 			$data = explode (';', $data);
 			foreach ($data as $key => $value) {
 				$datas[] = utf8_encode($value);
 			}
-			var_dump($data);
 			$responseArray = array(
 				'code' => 200,
 				'message' => 'OK',
@@ -199,6 +196,7 @@ $app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response
 			);
 			var_dump($responseArray);
 			$json_data = json_encode($responseArray);
+			var_dump($json_data);
 			$response->getBody()->write($json_data);
 			return $this->renderer->render($response, 'index.phtml', array());
 		}
