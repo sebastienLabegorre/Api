@@ -40,6 +40,15 @@ $app->get('/api/delete/[{arg1}]', function (Request $request, Response $response
 	return $this->renderer->render($response, 'index.phtml', $args);
 });
 
+$app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
+	$arg1 = $args['arg1'];
+	$query = "SELECT * FROM `recipes__recipe` where slug = '".$arg1."'";
+	$data = mysqli_query($this->mysqli, $query);
+	$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
+	var_dump($data);
+	exit;
+});
+
 $app->post('/api/recipes.json', function (Request $request, Response $response, array $args) {
 	if(isset($_POST['step']) && isset($_POST['name']) ){
 		if(isset($_POST['slug'])) {
