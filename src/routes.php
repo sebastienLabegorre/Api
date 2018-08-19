@@ -146,19 +146,26 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 					'code' => 401,
 					'message' => 'Unauthorized',
 				);
-				$json_data = json_encode($responseArray);
 				$response = $response->withStatus(401, 'Unauthorized');
+			}else {
+				$responseArray = array(
+							'code' => 400,
+							'message' => 'Bad Request',
+							'datas' => array(),
+						);
+						$response = $response->withStatus(400, 'Bad Request');
+			}
+			$json_data = json_encode($responseArray);
+
 				$response->getBody()->write($json_data);
 				return $this->renderer->render($response, 'index.phtml', $args);
-			}
 		}
 		$responseArray = array(
-			'code' => 400,
-			'message' => 'Bad Request',
-			'datas' => array(),
+			'code' => 401,
+			'message' => 'Unauthorized',
 		);
 		$json_data = json_encode($responseArray);
-		$response = $response->withStatus(400, 'Bad Request');
+		$response = $response->withStatus(401, 'Unauthorized');
 		$response->getBody()->write($json_data);
 		return $this->renderer->render($response, 'index.phtml', $args);
 	}
