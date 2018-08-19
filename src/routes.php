@@ -109,9 +109,9 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 				'datas' => array(
 					'id' => $id,
 					'name' => $_POST['name'],
-					'user' => $_POST,
+					'user' => $user,
 					'slug' => $_POST['slug'],
-					'step' => explode(';', $step_str)
+					'step' => $_POST['step'],
 				),
 			);
 			$json_data = json_encode($data);
