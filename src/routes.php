@@ -41,10 +41,6 @@ $app->get('/api/delete/[{arg1}]', function (Request $request, Response $response
 });
 
 $app->post('/api/recipes.json', function (Request $request, Response $response, array $args) {
-	$headerValueArray = $request->getHeader('authorization');
-	var_dump($request->getHeader());
-	var_dump($headerValueArray);
-	exit;
 	if(isset($_POST['step']) && isset($_POST['name']) ){
 		if(isset($_POST['slug'])) {
 			$query = "SELECT id FROM `recipes__recipe` WHERE `slug` = '".$_POST['slug']."'";
@@ -64,10 +60,12 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 		} else {
 			$_POST['slug'] = time();
 		}
-
-		if (isset($_POST['-H'])) {
-			$password = explode(' ', str_replace('"', '', $_POST['-H']));
-			$password = $password[1];
+		$headerValueArray = $request->getHeader('authorization');
+		$password = '';
+		if (isset($headerValueArray[0])) {
+			$password = $headerValueArray[0];
+		//	$password = explode(' ', str_replace('"', '', $_POST['-H']));
+		//	$password = $password[1];
 			$query_pass = "SELECT username, last_login, id FROM `users__user` WHERE password = '".$password."'";
 			$password = mysqli_query($this->mysqli, $query_pass);
 			$password = mysqli_fetch_all($password, MYSQLI_ASSOC);
