@@ -52,9 +52,8 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	$name = $data ["name"];
 	$slug = $data ["slug"];
 	$step = $data ["step"];
-
-	var_dump($_PUT);
-	var_dump($_POST);
+	$allPostPutVars = $request->getParsedBody();
+	var_dump($allPostPutVars);
 	exit;
 });
 
