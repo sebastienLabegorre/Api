@@ -151,6 +151,7 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 				$response->getBody()->write($json_data);
 				return $this->renderer->render($response, 'index.phtml', $args);
 			}
+		}
 		$responseArray = array(
 			'code' => 400,
 			'message' => 'Bad Request',
