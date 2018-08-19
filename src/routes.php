@@ -46,6 +46,7 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 			$query = "SELECT id FROM `recipes__recipe` WHERE `slug` = '".$_POST['slug']."'";
 			$slug = mysqli_query($this->mysqli, $query_pass);
 			$slug = mysqli_fetch_all($slug, MYSQLI_ASSOC);
+			var_dump($slug);
 			if($slug[0] != array()){
 				$responseArray = array(
 					'code' => 400,
@@ -100,6 +101,11 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 					)";
 			mysqli_query($this->mysqli, $query);
 
+			$mystep = array();
+			foreach ($_POST['step'] as $key => $value) {
+				$mystep[] = str_replace('+', ' ', $value);
+			}
+
 			$id = mysqli_query($this->mysqli, "SELECT * FROM `recipes__recipe`WHERE slug = '".$_POST['slug']."'");
 			$id = mysqli_fetch_all($id, MYSQLI_ASSOC);
 			$id = $id[0]['id'];
@@ -111,7 +117,7 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 					'name' => $_POST['name'],
 					'user' => $user,
 					'slug' => $_POST['slug'],
-					'step' => $_POST['step'],
+					'step' => $mystep,
 				),
 			);
 			$json_data = json_encode($data);
