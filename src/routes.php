@@ -41,6 +41,28 @@ $app->get('/api/delete/[{arg1}]', function (Request $request, Response $response
 });
 
 $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
+	$headerValueArray = $request->getHeader('authorization');
+	if (isset($headerValueArray[0])) {
+		$password = $headerValueArray[0];
+	} else {
+		$responseArray = array(
+			'code' => 401,
+			'message' => 'Unauthorized',
+		);
+		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(401, 'Unauthorized');
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
+
+	$query = "SELECT id, password FROM `users__user`";
+	$allpas = mysqli_query($this->mysqli, $query);
+	$allpas = mysqli_fetch_all($allpas, MYSQLI_ASSOC);
+
+	var_dump($password);
+	var_dump($allpas);
+	exit;
+
 	$arg1 = $args['arg1'];
 	$arg1 = str_replace('.json', '', $arg1);
 	$query = "SELECT * FROM `recipes__recipe` where slug = '".$arg1."'";
@@ -49,11 +71,14 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	$data = $data[0];
 	$id = $data["id"];
 	$user_id = $data ["user_id"];
-	$name = $data ["name"];
-	$slug = $data ["slug"];
-	$step = $data ["step"];
+	$name = $data["name"];
+	$slug = $data["slug"];
+	$step = $data["step"];
 	$allPostPutVars = $request->getParsedBody();
+
 	var_dump($allPostPutVars);
+	if(isset($allPostPutVars["name"]))
+		$name = $allPostPutVars["name"];
 	exit;
 });
 
