@@ -120,7 +120,7 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	if(isset($allPostPutVars["step"])){
 		$step = '';
 		$separateur = '';
-		foreach ($$allPostPutVars["step"] as $key => $value) {
+		foreach ($allPostPutVars["step"] as $key => $value) {
 			$step = $separateur.$step.str_replace(' ', '+', $value);
 			$separateur = ';';
 		}
