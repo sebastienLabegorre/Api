@@ -64,13 +64,15 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 		$password = '';
 		if (isset($headerValueArray[0])) {
 			$password = $headerValueArray[0];
+			var_dump($password);
 		//	$password = explode(' ', str_replace('"', '', $_POST['-H']));
 		//	$password = $password[1];
 			$query_pass = "SELECT username, last_login, id FROM `users__user` WHERE password = '".$password."'";
 			$password = mysqli_query($this->mysqli, $query_pass);
 			$password = mysqli_fetch_all($password, MYSQLI_ASSOC);
-
+			var_dump($password);
 			if($password == array()) {
+				var_dump('password == array');
 				$responseArray = array(
 					'code' => 401,
 					'message' => 'Unauthorized',
