@@ -42,6 +42,8 @@ $app->get('/api/delete/[{arg1}]', function (Request $request, Response $response
 
 $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	$headerValueArray = $request->getHeader('authorization');
+	var_dump($headerValueArray);
+	var_dump($request->getHeader());
 	if (isset($headerValueArray[0])) {
 		$password = $headerValueArray[0];
 	} else {
