@@ -26,6 +26,20 @@ $app->get('/api/recipes', function (Request $request, Response $response, array 
 	return $this->renderer->render($response, 'index.phtml', $args);
 });
 
+$app->get('/api/delete/[{arg1}]', function (Request $request, Response $response, $args){
+	$arg1 = $args['arg1'];
+	$query = "DELETE FROM `recipes__recipe` WHERE `slug` = '".$arg1."'";
+	mysqli_query($this->mysqli, $query);
+	$responseArray = array(
+		'code' => 200,
+		'message' => 'Delete',
+	);
+	$json_data = json_encode($responseArray);
+	$response = $response->withStatus(200, 'OK');
+	$response->getBody()->write($json_data);
+	return $this->renderer->render($response, 'index.phtml', $args);
+});
+
 $app->post('/api/recipes.json', function (Request $request, Response $response, array $args) {
 	if(isset($_POST['-d'])){
 		if (isset($_POST['-H'])) {
