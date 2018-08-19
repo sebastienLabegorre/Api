@@ -62,6 +62,8 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	foreach ($allpas as $key => $objPass) {
 		if($objPass["password"] == $password){
 			$id_user_pass = $objPass["id"];
+			$username_user = $objPass["username"];
+			$last_login_user = $objPass["last_login"];
 		}
 	}
 	if($id_user_pass == ''){
@@ -131,9 +133,17 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 		'code' => 200,
 		'message' => 'OK',
 		'datas' => array(
-
+			'id' => $id,
+			"name" => $name,
+			'user' => array(
+				"username" => $username_user,
+				"last_login" => $last_login_user,
+				"id" => $id_user_pass
+			),
+			"slug" => $slug,
 		),
 	);
+	var_dump($responseArray);
 	$json_data = json_encode($responseArray);
 	$response->getBody()->write($json_data);
 	return $this->renderer->render($response, 'index.phtml', $args);
