@@ -190,15 +190,12 @@ $app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response
 				$data[$key] = utf8_encode($value);
 			}
 
-			var_dump($data);
 			$responseArray = array(
 				'code' => 200,
 				'message' => 'OK',
 				'datas' => $data,
 			);
-			var_dump($responseArray);
 			$json_data = json_encode($responseArray);
-			var_dump($json_data);
 			$response->getBody()->write($json_data);
 			return $this->renderer->render($response, 'index.phtml', array());
 		}
