@@ -188,11 +188,14 @@ $app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response
 			$data = str_replace('"', '', $data[0]["step"]);
 			var_dump($data);
 			$data = explode (';', $data);
+			foreach ($data as $key => $value) {
+				$datas[] = utf8_encode($value);
+			}
 			var_dump($data);
 			$responseArray = array(
 				'code' => 200,
 				'message' => 'OK',
-				'datas' => $data,
+				'datas' => $datas,
 			);
 			var_dump($responseArray);
 			$json_data = json_encode($responseArray);
