@@ -125,11 +125,11 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 			return $this->renderer->render($response, 'index.phtml', $args);
 		}else {
 			$responseArray = array(
-				'code' => 403,
-				'message' => 'Forbidden',
+				'code' => 401,
+				'message' => 'Unauthorized',
 			);
 			$json_data = json_encode($responseArray);
-			$response = $response->withStatus(403, 'Forbidden');
+			$response = $response->withStatus(401, 'Unauthorized');
 			$response->getBody()->write($json_data);
 			return $this->renderer->render($response, 'index.phtml', $args);
 		}
