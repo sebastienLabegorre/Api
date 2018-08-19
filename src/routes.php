@@ -73,7 +73,7 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 			$id = mysqli_fetch_all($password, MYSQLI_ASSOC);
 			$id = $id[0]['id'];
 			$data = array(
-				'code' => '201',
+				'code' => 201,
 				'message' => 'Created',
 				'datas' => array(
 					'id' => $id,
@@ -84,8 +84,9 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 				),
 			);
 			$json_data = json_encode($data);
-			$res->getBody()->write($json_data);
-
+			$response = $response->withStatus(201, 'Created');
+			$response->getBody()->write($json_data);
+			return $this->renderer->render($response, 'index.phtml', $args);
 		}else {
 			$responseArray = array(
 				'code' => 403,
