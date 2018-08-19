@@ -175,19 +175,20 @@ $app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response
 	$this->logger->info("Slim-Skeleton '/' route");
 
 	$arg1 = $args['arg1'];
-	var_dump($arg1);
 	$query = "SELECT slug FROM `recipes__recipe`";
 	$slugs = mysqli_query($this->mysqli, $query);
 	$slugs = mysqli_fetch_all($slugs, MYSQLI_ASSOC);
-	var_dump($slugs);
+
 	foreach ($slugs as $key => $value) {
 		if ($value["slug"] == $arg1) {
 			$query = "SELECT step FROM `recipes__recipe` where slug = '".$arg1."'";
-			var_dump($query);
 			$data = mysqli_query($this->mysqli, $query);
 			$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
+			var_dump($data);
 			$data = str_replace('"', '', $data[0]["step"]);
+			var_dump($data);
 			$data = explode (';', $data);
+			var_dump($data);
 			$responseArray = array(
 				'code' => 200,
 				'message' => 'OK',
