@@ -41,6 +41,8 @@ $app->get('/api/delete/[{arg1}]', function (Request $request, Response $response
 });
 
 $app->post('/api/recipes.json', function (Request $request, Response $response, array $args) {
+	var_dump($_POST);
+	exit;
 	if(isset($_POST['-d'])){
 		if (isset($_POST['-H'])) {
 			$password = explode(' ', str_replace('"', '', $_POST['-H']));
