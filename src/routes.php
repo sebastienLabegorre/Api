@@ -186,14 +186,14 @@ $app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response
 			$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
 			$data = str_replace('"', '', $data[0]["step"]);
 			$data = explode (';', $data);
-			foreach ($data as $key => $value) {
-				$datas[] = $value;
-			}
+
+			var_dump($data);
 			$responseArray = array(
 				'code' => 200,
 				'message' => 'OK',
-				'datas' => $datas,
+				'datas' => $data,
 			);
+			var_dump($responseArray);
 			$json_data = json_encode($responseArray);
 			var_dump($json_data);
 			$response->getBody()->write($json_data);
