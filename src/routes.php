@@ -55,7 +55,7 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 		return $this->renderer->render($response, 'index.phtml', $args);
 	}
 
-	$query = "SELECT id, password FROM `users__user`";
+	$query = "SELECT * FROM `users__user`";
 	$allpas = mysqli_query($this->mysqli, $query);
 	$allpas = mysqli_fetch_all($allpas, MYSQLI_ASSOC);
 	$id_user_pass = '';
@@ -80,20 +80,63 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	$query = "SELECT * FROM `recipes__recipe` where slug = '".$arg1."'";
 	$data = mysqli_query($this->mysqli, $query);
 	$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
+	if($data == array()){
+		$responseArray = array(
+			'code' => 400,
+			'message' => 'Bad Request',
+			'datas' => array(),
+		);
+		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(400, 'Bad Request');
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
 	$data = $data[0];
-	var_dump($data);
-	exit;
 	$id = $data["id"];
 	$user_id = $data ["user_id"];
 	$name = $data["name"];
 	$slug = $data["slug"];
 	$step = $data["step"];
-	$allPostPutVars = $request->getParsedBody();
 
-	var_dump($allPostPutVars);
+	$allPostPutVars = $request->getParsedBody();
+	if($allPostPutVars == array()){
+		$responseArray = array(
+			'code' => 400,
+			'message' => 'Bad Request',
+			'datas' => array(),
+		);
+		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(400, 'Bad Request');
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
+
 	if(isset($allPostPutVars["name"]))
 		$name = $allPostPutVars["name"];
-	exit;
+	if(isset($allPostPutVars["slug"]))
+		$slug = $allPostPutVars["slug"];
+	if(isset($allPostPutVars["step"])){
+		$step = '';
+		$separateur = '';
+		foreach ($$allPostPutVars["step"] as $key => $value) {
+			$step = $separateur.$step.str_replace(' ', '+', $value);
+			$separateur = ';';
+		}
+	}
+	$user_id = $id_user_pass;
+
+	$query = "UPDATE `recipes__recipe` SET `name` = '".$name."', `slug` = '".$slug."', `step` = '".$step."', `user_id` = '".$user_id."' WHERE `recipes__recipe`.`id` = ".$id;
+	mysqli_query($this->mysqli, $query);
+	$responseArray = array(
+		'code' => 200,
+		'message' => 'OK',
+		'datas' => array(
+
+		),
+	);
+	$json_data = json_encode($responseArray);
+	$response->getBody()->write($json_data);
+	return $this->renderer->render($response, 'index.phtml', $args);
 });
 
 $app->post('/api/recipes.json', function (Request $request, Response $response, array $args) {
