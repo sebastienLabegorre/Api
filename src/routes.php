@@ -134,6 +134,23 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 			return $this->renderer->render($response, 'index.phtml', $args);
 		}
 	} else {
+		$headerValueArray = $request->getHeader('authorization');
+		$password = '';
+		if (isset($headerValueArray[0])) {
+			$password = $headerValueArray[0];
+			$query_pass = "SELECT username, last_login, id FROM `users__user` WHERE password = '".$password."'";
+			$password = mysqli_query($this->mysqli, $query_pass);
+			$password = mysqli_fetch_all($password, MYSQLI_ASSOC);
+			if($password == array()) {
+				$responseArray = array(
+					'code' => 401,
+					'message' => 'Unauthorized',
+				);
+				$json_data = json_encode($responseArray);
+				$response = $response->withStatus(401, 'Unauthorized');
+				$response->getBody()->write($json_data);
+				return $this->renderer->render($response, 'index.phtml', $args);
+			}
 		$responseArray = array(
 			'code' => 400,
 			'message' => 'Bad Request',
