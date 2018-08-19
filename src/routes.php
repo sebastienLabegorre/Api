@@ -26,6 +26,88 @@ $app->get('/api/recipes', function (Request $request, Response $response, array 
 	return $this->renderer->render($response, 'index.phtml', $args);
 });
 
+$app->post('/api/recipes.json', function (Request $request, Response $response, array $args) {
+	if(isset($_POST['-d'])){
+		if (isset($_POST['-H'])) {
+			$password = explode(' ', str_replace('"', '', $_POST['-H']));
+			$password = $password[1];
+			$query_pass = "SELECT username, last_login, id FROM `users__user` WHERE password = '".$password."'";
+			$password = mysqli_query($this->mysqli, $query_pass);
+			$password = mysqli_fetch_all($password, MYSQLI_ASSOC);
+
+			if($password == array()) {
+				$responseArray = array(
+					'code' => 401,
+					'message' => 'Unauthorized',
+				);
+				$json_data = json_encode($responseArray);
+				$response = $response->withStatus(401, 'Unauthorized');
+				$response->getBody()->write($json_data);
+				return $this->renderer->render($response, 'index.phtml', $args);
+			} else {
+				$user = $password[0];
+			}
+			$element = explode('&', str_replace('"', '', $_POST['-d']));
+
+			foreach ($element as $key => $value) {
+				$part = explode('=', str_replace('+', ' ', $value));
+				$element[$part[0]] = $part[1];
+			}
+			if(!isset($element['slug'])){
+				$element['slug'] = time();
+			}
+			$query = "INSERT INTO `recipes__recipe` (
+				`user_id`,
+				`name`,
+				`slug`,
+				`step`
+				) VALUES (
+					'".$user['id']."',
+					'".$element['name']."',
+					'".$element['slug']."',
+					'".$element['step[]']."'
+					)";
+			mysqli_query($this->mysqli, $query);
+
+			$id = mysqli_query($this->mysqli, "SELECT * FROM `recipes__recipe`WHERE slug = '".$element['slug']."'");
+			$id = mysqli_fetch_all($password, MYSQLI_ASSOC);
+			$id = $id[0]['id'];
+			$data = array(
+				'code' => '201',
+				'message' => 'Created',
+				'datas' => array(
+					'id' => $id,
+					'name' => $element['name'],
+					'user' => $user,
+					'slug' => $element['slug'],
+					'step' => explode(';', $element['step[]'])
+				),
+			);
+			$json_data = json_encode($data);
+			$res->getBody()->write($json_data);
+
+		}else {
+			$responseArray = array(
+				'code' => 403,
+				'message' => 'Forbidden',
+			);
+			$json_data = json_encode($responseArray);
+			$response = $response->withStatus(403, 'Forbidden');
+			$response->getBody()->write($json_data);
+			return $this->renderer->render($response, 'index.phtml', $args);
+		}
+	} else {
+		$responseArray = array(
+			'code' => 403,
+			'message' => 'Forbidden',
+		);
+		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(403, 'Forbidden');
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
+});
+
 $app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response $response, $args) {
 	$this->logger->info("Slim-Skeleton '/' route");
 
@@ -42,7 +124,7 @@ $app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response
 			$data = str_replace('"', '', $data[0]["step"]);
 			$data = explode (';', $data);
 			$responseArray = array(
-				'code' => '200',
+				'code' => 200,
 				'message' => 'OK',
 				'datas' => $data,
 			);
