@@ -42,10 +42,19 @@ $app->get('/api/delete/[{arg1}]', function (Request $request, Response $response
 
 $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	$arg1 = $args['arg1'];
+	$arg1 = str_replace('.json', '', $arg1);
 	$query = "SELECT * FROM `recipes__recipe` where slug = '".$arg1."'";
 	$data = mysqli_query($this->mysqli, $query);
 	$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
-	var_dump($data);
+	$data = $data[0];
+	$id = $data["id"];
+	$user_id = $data ["user_id"];
+	$name = $data ["name"];
+	$slug = $data ["slug"];
+	$step = $data ["step"];
+
+	var_dump($_PUT);
+	var_dump($_POST);
 	exit;
 });
 
