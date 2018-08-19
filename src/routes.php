@@ -292,12 +292,13 @@ $app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response
 			$query = "SELECT step FROM `recipes__recipe` where slug = '".$arg1."'";
 			$data = mysqli_query($this->mysqli, $query);
 			$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
+			var_dump($data);
 			$data = str_replace('"', '', $data[0]["step"]);
 			$data = explode (';', $data);
 			foreach ($data as $key => $value) {
 				$data[$key] = utf8_encode($value);
 			}
-var_dump($data);
+
 			$responseArray = array(
 				'code' => 200,
 				'message' => 'OK',
