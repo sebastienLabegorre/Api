@@ -143,7 +143,6 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 			"slug" => $slug,
 		),
 	);
-	var_dump($responseArray);
 	$json_data = json_encode($responseArray);
 	$response->getBody()->write($json_data);
 	return $this->renderer->render($response, 'index.phtml', $args);
