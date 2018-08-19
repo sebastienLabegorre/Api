@@ -41,9 +41,30 @@ $app->get('/api/delete/[{arg1}]', function (Request $request, Response $response
 });
 
 $app->post('/api/recipes.json', function (Request $request, Response $response, array $args) {
-	var_dump($_POST);
+	$headerValueArray = $request->getHeader('authorization');
+	var_dump($request->getHeader());
+	var_dump($headerValueArray);
 	exit;
-	if(isset($_POST['-d'])){
+	if(isset($_POST['step']) && isset($_POST['name']) ){
+		if(isset($_POST['slug'])) {
+			$query = "SELECT id FROM `recipes__recipe` WHERE `slug` = '".$_POST['slug']."'";
+			$slug = mysqli_query($this->mysqli, $query_pass);
+			$slug = mysqli_fetch_all($slug, MYSQLI_ASSOC);
+			if($slug[0] != array()){
+				$responseArray = array(
+					'code' => 400,
+					'message' => 'Bad Request',
+					'datas' => array(),
+				);
+				$json_data = json_encode($responseArray);
+				$response = $response->withStatus(400, 'Bad Request');
+				$response->getBody()->write($json_data);
+				return $this->renderer->render($response, 'index.phtml', $args);
+			}
+		} else {
+			$_POST['slug'] = time();
+		}
+
 		if (isset($_POST['-H'])) {
 			$password = explode(' ', str_replace('"', '', $_POST['-H']));
 			$password = $password[1];
@@ -63,15 +84,14 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 			} else {
 				$user = $password[0];
 			}
-			$element = explode('&', str_replace('"', '', $_POST['-d']));
+			//$element = explode('&', str_replace('"', '', $_POST['-d']));
+			$step_str = '';
+			$separateur = '';
+			foreach ($_POST['step'] as $key => $value) {
+				$step_str = $separateur.$step_str.str_replace('+', ' ', $value);
+				$separateur = ';';
+			}
 
-			foreach ($element as $key => $value) {
-				$part = explode('=', str_replace('+', ' ', $value));
-				$element[$part[0]] = $part[1];
-			}
-			if(!isset($element['slug'])){
-				$element['slug'] = time();
-			}
 			$query = "INSERT INTO `recipes__recipe` (
 				`user_id`,
 				`name`,
@@ -79,13 +99,13 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 				`step`
 				) VALUES (
 					'".$user['id']."',
-					'".$element['name']."',
-					'".$element['slug']."',
-					'".$element['step[]']."'
+					'".$_POST['name']."',
+					'".$_POST['slug']."',
+					'".$step_str."'
 					)";
 			mysqli_query($this->mysqli, $query);
 
-			$id = mysqli_query($this->mysqli, "SELECT * FROM `recipes__recipe`WHERE slug = '".$element['slug']."'");
+			$id = mysqli_query($this->mysqli, "SELECT * FROM `recipes__recipe`WHERE slug = '".$_POST['slug']."'");
 			$id = mysqli_fetch_all($id, MYSQLI_ASSOC);
 			$id = $id[0]['id'];
 			$data = array(
@@ -93,10 +113,10 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 				'message' => 'Created',
 				'datas' => array(
 					'id' => $id,
-					'name' => $element['name'],
-					'user' => $user,
-					'slug' => $element['slug'],
-					'step' => explode(';', $element['step[]'])
+					'name' => $_POST['name'],
+					'user' => $_POST,
+					'slug' => $_POST['slug'],
+					'step' => explode(';', $step_str)
 				),
 			);
 			$json_data = json_encode($data);
