@@ -297,7 +297,7 @@ $app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response
 			foreach ($data as $key => $value) {
 				$data[$key] = utf8_encode($value);
 			}
-
+var_dump($data);
 			$responseArray = array(
 				'code' => 200,
 				'message' => 'OK',
