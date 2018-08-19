@@ -84,7 +84,7 @@ $app->post('/api/recipes.json', function (Request $request, Response $response, 
 			mysqli_query($this->mysqli, $query);
 
 			$id = mysqli_query($this->mysqli, "SELECT * FROM `recipes__recipe`WHERE slug = '".$element['slug']."'");
-			$id = mysqli_fetch_all($password, MYSQLI_ASSOC);
+			$id = mysqli_fetch_all($id, MYSQLI_ASSOC);
 			$id = $id[0]['id'];
 			$data = array(
 				'code' => 201,
