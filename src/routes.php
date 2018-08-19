@@ -128,7 +128,7 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	$user_id = $id_user_pass;
 
 	$query = "UPDATE `recipes__recipe` SET `name` = '".$name."', `slug` = '".$slug."', `step` = '".$step."', `user_id` = '".$user_id."' WHERE `recipes__recipe`.`id` = ".$id;
-var_dump($query);
+
 	mysqli_query($this->mysqli, $query);
 	$responseArray = array(
 		'code' => 200,
