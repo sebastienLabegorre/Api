@@ -294,6 +294,7 @@ $app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response
 			$data = mysqli_query($this->mysqli, $query);
 			$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
 			$data = str_replace('"', '', $data[0]["step"]);
+			$data = str_replace('+', ' ', $data);
 			$data = explode (';', $data);
 			foreach ($data as $key => $value) {
 				$data[$key] = utf8_encode($value);
