@@ -113,16 +113,21 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 		return $this->renderer->render($response, 'index.phtml', $args);
 	}
 
-	if (!isset($allPostPutVars["slug"])) {
-		$responseArray = array(
-			'code' => 400,
-			'message' => 'Bad Request',
-			'datas' => array(),
-		);
-		$json_data = json_encode($responseArray);
-		$response = $response->withStatus(400, 'Bad Request');
-		$response->getBody()->write($json_data);
-		return $this->renderer->render($response, 'index.phtml', $args);
+	if (isset($allPostPutVars["slug"])) {
+		$query = "SELECT * FROM `recipes__recipe` where slug = '".$allPostPutVars["slug"]."'";
+		$data = mysqli_query($this->mysqli, $query);
+		$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
+		if($data != array()){
+			$responseArray = array(
+				'code' => 400,
+				'message' => 'Bad Request',
+				'datas' => array(),
+			);
+			$json_data = json_encode($responseArray);
+			$response = $response->withStatus(400, 'Bad Request');
+			$response->getBody()->write($json_data);
+			return $this->renderer->render($response, 'index.phtml', $args);
+		}
 	}
 	if (!isset($allPostPutVars["name"])) {
 		$responseArray = array(
