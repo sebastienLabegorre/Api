@@ -113,7 +113,30 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 		return $this->renderer->render($response, 'index.phtml', $args);
 	}
 
-	if(isset($allPostPutVars["name"]))
+	if (!isset($allPostPutVars["slug"])) {
+		$responseArray = array(
+			'code' => 400,
+			'message' => 'Bad Request',
+			'datas' => array(),
+		);
+		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(400, 'Bad Request');
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
+	if (!isset($allPostPutVars["name"])) {
+		$responseArray = array(
+			'code' => 400,
+			'message' => 'Bad Request',
+			'datas' => array(),
+		);
+		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(400, 'Bad Request');
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
+
+	if(isset($allPostPutVars["name"])){}
 		$name = $allPostPutVars["name"];
 	if(isset($allPostPutVars["slug"]))
 		$slug = $allPostPutVars["slug"];
