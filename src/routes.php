@@ -101,10 +101,16 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	$slug = $data["slug"];
 	$step = $data["step"];
 
-	var_dump($user_id);
-	echo "<br>";
-	var_dump($id_user_pass);
-
+	if ($user_id != $id_user_pass) {
+		$responseArray = array(
+			'code' => 403,
+			'message' => 'Forbidden',
+		);
+		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(403, 'Forbidden');
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
 
 	$allPostPutVars = $request->getParsedBody();
 	if($allPostPutVars == array()){
