@@ -94,8 +94,8 @@ $app->delete('/api/delete/[{arg1}]', function (Request $request, Response $respo
 	$response = $response->withStatus(200, 'success');
 	$response->getBody()->write($json_data);
 	return $this->renderer->render($response, 'index.phtml', $args);
-}
-
+});
+/*
 $app->get('/api/delete/[{arg1}]', function (Request $request, Response $response, $args){
 	$arg1 = $args['arg1'];
 	$query = "DELETE FROM `recipes__recipe` WHERE `slug` = '".$arg1."'";
@@ -109,7 +109,7 @@ $app->get('/api/delete/[{arg1}]', function (Request $request, Response $response
 	$response->getBody()->write($json_data);
 	return $this->renderer->render($response, 'index.phtml', $args);
 });
-
+*/
 $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	$headerValueArray = $request->getHeader('authorization');
 	if (isset($headerValueArray[0])) {
