@@ -86,8 +86,8 @@ $app->delete('/api/delete/[{arg1}]', function (Request $request, Response $respo
 	$responseArray = array(
 		'code' => 200,
 		'message' => 'success',
-		'datas' = array(
-			'id' = $id,
+		'datas' => array(
+			'id' => $id,
 		),
 	);
 	$json_data = json_encode($responseArray);
