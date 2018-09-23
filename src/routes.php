@@ -27,7 +27,7 @@ $app->get('/api/recipes', function (Request $request, Response $response, array 
 });
 
 /*Delete*/
-$app->delete('/api/delete/[{arg1}]', function (Request $request, Response $response, $args) {
+$app->delete('/api/recipes/[{arg1}]', function (Request $request, Response $response, $args) {
 	$arg1 = $args['arg1'];
 	$arg1 = str_replace('.json', '', $arg1);
 	$headerValueArray = $request->getHeader('authorization');
