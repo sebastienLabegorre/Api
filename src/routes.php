@@ -26,6 +26,76 @@ $app->get('/api/recipes', function (Request $request, Response $response, array 
 	return $this->renderer->render($response, 'index.phtml', $args);
 });
 
+/*Delete*/
+$app->delete('/api/delete/[{arg1}]', function (Request $request, Response $response, $args) {
+	$arg1 = $args['arg1'];
+	$arg1 = str_replace('.json', '', $arg1);
+	$headerValueArray = $request->getHeader('authorization');
+	if (isset($headerValueArray[0])) {
+		$password = $headerValueArray[0];
+	} else {
+		$responseArray = array(
+			'code' => 401,
+			'message' => 'Unauthorized',
+		);
+		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(401, 'Unauthorized');
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
+
+	$query = "SELECT * FROM `users__user`";
+	$allpas = mysqli_query($this->mysqli, $query);
+	$allpas = mysqli_fetch_all($allpas, MYSQLI_ASSOC);
+	$id_user_pass = '';
+	foreach ($allpas as $key => $objPass) {
+		if($objPass["password"] == $password){
+			$id_user_pass = $objPass["id"];
+			$username_user = $objPass["username"];
+			$last_login_user = $objPass["last_login"];
+		}
+	}
+	if($id_user_pass == ''){
+		$responseArray = array(
+			'code' => 403,
+			'message' => 'Forbidden',
+		);
+		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(403, 'Forbidden');
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
+	$query = "SELECT * FROM `recipes__recipe` where slug = '".$arg1."'";
+	$data = mysqli_query($this->mysqli, $query);
+	$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
+	if($data == array()){
+		$responseArray = array(
+			'code' => 400,
+			'message' => 'Bad Request',
+			'datas' => array(),
+		);
+		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(400, 'Bad Request');
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
+	$data = $data[0];
+	$id = $data["id"];
+	$query = "DELETE FROM `recipes__recipe` WHERE `slug` = '".$arg1."'";
+	mysqli_query($this->mysqli, $query);
+	$responseArray = array(
+		'code' => 200,
+		'message' => 'success',
+		'datas' = array(
+			'id' = $id,
+		)
+	);
+	$json_data = json_encode($responseArray);
+	$response = $response->withStatus(200, 'success');
+	$response->getBody()->write($json_data);
+	return $this->renderer->render($response, 'index.phtml', $args);
+}
+
 $app->get('/api/delete/[{arg1}]', function (Request $request, Response $response, $args){
 	$arg1 = $args['arg1'];
 	$query = "DELETE FROM `recipes__recipe` WHERE `slug` = '".$arg1."'";
