@@ -58,6 +58,7 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 	$query = "SELECT * FROM `users__user`";
 	$allpas = mysqli_query($this->mysqli, $query);
 	$allpas = mysqli_fetch_all($allpas, MYSQLI_ASSOC);
+/**/var_dump($allpas);
 	$id_user_pass = '';
 	foreach ($allpas as $key => $objPass) {
 		if($objPass["password"] == $password){
@@ -130,6 +131,18 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 		}
 	}
 	if (!isset($allPostPutVars["name"])) {
+		$responseArray = array(
+			'code' => 400,
+			'message' => 'Bad Request',
+			'datas' => array(),
+		);
+		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(400, 'Bad Request');
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
+
+	if ($allPostPutVars["name"] == '') {
 		$responseArray = array(
 			'code' => 400,
 			'message' => 'Bad Request',
