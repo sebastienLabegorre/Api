@@ -73,7 +73,6 @@ $app->delete('/api/recipes/[{arg1}]', function (Request $request, Response $resp
 		$responseArray = array(
 			'code' => 400,
 			'message' => 'Bad Request',
-			'datas' => array(),
 		);
 		$json_data = json_encode($responseArray);
 		$response = $response->withStatus(400, 'Bad Request');
