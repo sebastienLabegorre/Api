@@ -511,10 +511,7 @@ $app->get('/api/recipes.json', function (Request $request, Response $response, a
 		foreach ($data as $key => $value) {
 			$nbrpart = count(explode($recherche, $value['name']));
 			if ($nbrpart >= 2) {
-				var_dump(count(explode($recherche, $value['name'])));
-				echo " --- ";
 				$data2[] = $value;
-				echo $value['name'].' : a bien été selectionnée<br>';
 			}
 		}
 		$responseArray = array(
