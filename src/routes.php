@@ -520,6 +520,7 @@ $app->get('/api/recipes.json', function (Request $request, Response $response, a
 			'datas' => $data2,
 		);
 		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(200, 'OK');
 		$response->getBody()->write($json_data);
 		return $this->renderer->render($response, 'index.phtml', $args);
 	}
@@ -530,6 +531,7 @@ $app->get('/api/recipes.json', function (Request $request, Response $response, a
 		'datas' => $data,
 	);
 	$json_data = json_encode($responseArray);
+	$response = $response->withStatus(200, 'OK');
 	$response->getBody()->write($json_data);
 	// Render index view
 
