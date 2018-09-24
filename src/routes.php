@@ -509,7 +509,7 @@ $app->get('/api/recipes.json', function (Request $request, Response $response, a
 	$recherche = $request->getQueryParam('name');
 	if ($recherche != '') {
 		foreach ($data as $key => $value) {
-			if (count(explode($recherche, $value['name']) > 1)) {
+			if (count(explode($recherche, $value['name']) > 2)) {
 				$data2[] = $value;
 				echo $value['name'].' : a bien été selectionnée<br>';
 			}
