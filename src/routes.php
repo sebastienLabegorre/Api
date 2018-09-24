@@ -505,15 +505,21 @@ $app->get('/api/recipes.json', function (Request $request, Response $response, a
 
 	$data = mysqli_query($this->mysqli, $query);
 	$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
-
+	$data2 = array();
 	$recherche = $request->getQueryParam('name');
 	if ($recherche != '') {
 		foreach ($data as $key => $value) {
-			var_dump($value);
-			echo "<br>";
-			var_dump($value['name']);
-			echo "<br>";
+			if (count(explode($recherche, $value['name']) > 1)) {
+				$data2[] = $value;
+			}
 		}
+		$responseArray = array(
+			'code' => 200,
+			'message' => 'OK',
+			'datas' => $data2,
+		);
+		$json_data = json_encode($responseArray);
+		$response->getBody()->write($json_data);
 	}
 	
 	$responseArray = array(
