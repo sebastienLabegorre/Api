@@ -507,16 +507,14 @@ $app->get('/api/recipes.json', function (Request $request, Response $response, a
 	$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
 
 	$recherche = $request->getQueryParam('name');
-	var_dump($recherche);
 	if ($recherche != '') {
-		echo "<br>recherche n'est pas nul <br>";
-	}
-	/*if (isset($request->params('name'))) {
-		$recherche = $request->params('name');
 		foreach ($data as $key => $value) {
 			var_dump($value);
+			echo "<br>";
+			var_dump($value['name']);
+			echo "<br>";
 		}
-	}*/
+	}
 	
 	$responseArray = array(
 		'code' => 200,
