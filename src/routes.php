@@ -511,6 +511,7 @@ $app->get('/api/recipes.json', function (Request $request, Response $response, a
 		foreach ($data as $key => $value) {
 			if (count(explode($recherche, $value['name']) > 1)) {
 				$data2[] = $value;
+				$echo $value['name'].' : a bien été selectionnée<br>';
 			}
 		}
 		$responseArray = array(
@@ -520,6 +521,7 @@ $app->get('/api/recipes.json', function (Request $request, Response $response, a
 		);
 		$json_data = json_encode($responseArray);
 		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
 	}
 	
 	$responseArray = array(
