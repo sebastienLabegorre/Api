@@ -35,11 +35,11 @@ $app->delete('/api/recipes/[{arg1}]', function (Request $request, Response $resp
 		$password = $headerValueArray[0];
 	} else {
 		$responseArray = array(
-			'code' => 401,
-			'message' => 'Unauthorized',
+			'code' => 403,
+			'message' => 'Forbidden',
 		);
 		$json_data = json_encode($responseArray);
-		$response = $response->withStatus(401, 'Unauthorized');
+		$response = $response->withStatus(403, 'Forbidden');
 		$response->getBody()->write($json_data);
 		return $this->renderer->render($response, 'index.phtml', $args);
 	}
@@ -55,6 +55,7 @@ $app->delete('/api/recipes/[{arg1}]', function (Request $request, Response $resp
 			$last_login_user = $objPass["last_login"];
 		}
 	}
+
 	if($id_user_pass == ''){
 		$responseArray = array(
 			'code' => 403,
@@ -81,6 +82,19 @@ $app->delete('/api/recipes/[{arg1}]', function (Request $request, Response $resp
 	}
 	$data = $data[0];
 	$id = $data["id"];
+	$user_id = $data ["user_id"];
+
+	if ($id_user_pass != $user_id) {
+		$responseArray = array(
+			'code' => 403,
+			'message' => 'Forbidden',
+		);
+		$json_data = json_encode($responseArray);
+		$response = $response->withStatus(403, 'Forbidden');
+		$response->getBody()->write($json_data);
+		return $this->renderer->render($response, 'index.phtml', $args);
+	}
+
 	$query = "DELETE FROM `recipes__recipe` WHERE `slug` = '".$arg1."'";
 	mysqli_query($this->mysqli, $query);
 	$responseArray = array(
