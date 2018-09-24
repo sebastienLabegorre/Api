@@ -509,7 +509,8 @@ $app->get('/api/recipes.json', function (Request $request, Response $response, a
 	$recherche = $request->getQueryParam('name');
 	if ($recherche != '') {
 		foreach ($data as $key => $value) {
-			if (count(explode($recherche, $value['name']) > 2)) {
+			$nbrpart = count(explode($recherche, $value['name']));
+			if ($nbrpart >= 2) {
 				var_dump(count(explode($recherche, $value['name'])));
 				echo " --- ";
 				$data2[] = $value;
