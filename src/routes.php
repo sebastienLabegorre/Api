@@ -148,6 +148,7 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 			$id_user_pass = $objPass["id"];
 			$username_user = $objPass["username"];
 			$last_login_user = $objPass["last_login"];
+			$email = $objPass["email"];
 		}
 	}
 	if($id_user_pass == ''){
@@ -274,7 +275,8 @@ $app->put('/api/recipes/[{arg1}]', function ($request, $response, $args) {
 			'user' => array(
 				"username" => $username_user,
 				"last_login" => $last_login_user,
-				"id" => $id_user_pass
+				"id" => $id_user_pass,
+				"email" => $email,
 			),
 			"slug" => $slug,
 		),
