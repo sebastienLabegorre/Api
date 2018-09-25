@@ -479,10 +479,14 @@ $app->get('/api/recipes/[{arg1}]', function (Request $request, Response $respons
 			$user = mysqli_query($this->mysqli, $query);
 			$user = mysqli_fetch_all($user, MYSQLI_ASSOC);
 			$user = $user[0];
+			echo "<pre>";
+			var_dump($data);
 			if ($password != $data['password']) {
 				unset($data['email']);
 			}
 			unset($data['password']);
+			var_dump($data);
+			echo "</pre>";
 			$responseArray = array(
 				'code' => 200,
 				'message' => 'OK',
