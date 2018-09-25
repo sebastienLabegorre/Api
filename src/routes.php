@@ -470,7 +470,7 @@ $app->get('/api/recipes/[{arg1}]', function (Request $request, Response $respons
 			$data = mysqli_query($this->mysqli, $query);
 			$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
 			$data = $data[0];
-			$query = "SELECT username, last_login, id FROM `users__user` WHERE id = ".$data["user_id"];
+			$query = "SELECT username, last_login, id, email FROM `users__user` WHERE id = ".$data["user_id"];
 			$user = mysqli_query($this->mysqli, $query);
 			$user = mysqli_fetch_all($user, MYSQLI_ASSOC);
 			$user = $user[0];
