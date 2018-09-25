@@ -460,6 +460,11 @@ $app->get('/api/recipes/{arg1}/steps.json', function (Request $request, Response
 $app->get('/api/recipes/[{arg1}]', function (Request $request, Response $response, array $args) {
 	$this->logger->info("Slim-Skeleton '/' route");
 
+	$headerValueArray = $request->getHeader('authorization');
+	if (isset($headerValueArray[0])) {
+		$password = $headerValueArray[0];
+	}
+
 	$recherche = str_replace('.json', '',$args[arg1]);
 	$query = "SELECT slug FROM `recipes__recipe`";
 	$slugs = mysqli_query($this->mysqli, $query);
@@ -470,10 +475,14 @@ $app->get('/api/recipes/[{arg1}]', function (Request $request, Response $respons
 			$data = mysqli_query($this->mysqli, $query);
 			$data = mysqli_fetch_all($data, MYSQLI_ASSOC);
 			$data = $data[0];
-			$query = "SELECT username, last_login, id, email FROM `users__user` WHERE id = ".$data["user_id"];
+			$query = "SELECT * FROM `users__user` WHERE id = ".$data["user_id"];
 			$user = mysqli_query($this->mysqli, $query);
 			$user = mysqli_fetch_all($user, MYSQLI_ASSOC);
 			$user = $user[0];
+			if ($password != $data['password']) {
+				unset($data['email']);
+			}
+			unset($data['password']);
 			$responseArray = array(
 				'code' => 200,
 				'message' => 'OK',
